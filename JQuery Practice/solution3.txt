@@ -1,0 +1,14 @@
+    entityManager = factory.createEntityManager();
+    entityManager.getTransaction().begin();        
+    Query q = entityManager.createQuery("select BL2 from BusinessLocation BL2 join BL2.partOf BUS2" +
+							 " where BL2.isLocationFor = BUS2" +
+							 " and exists (select BL1 from BusinessLocation BL1 join BL1.partOf BUS1" +
+							 " where BL1.locatedAt.address = ?" +
+							 " and BL1.locatedAt.partOf.name = ?" +
+							 " and BUS1 = BUS2)");
+		
+    for (BusinessLocation bl : (List<BusinessLocation>) q.getResultList()) {
+        System.out.println(bl.getId() + "-" + bl.getDescription());
+    }	
+    entityManager.getTransaction().commit();
+    entityManager.close();
